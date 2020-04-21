@@ -39,5 +39,12 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp" />
+        <TextView
+            android:id="@+id/temperature_value_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_sport_centers"
+            android:gravity="center"
+            android:fontFamily="@font/font"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
