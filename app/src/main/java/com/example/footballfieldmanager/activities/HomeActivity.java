@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements SportCenterDelega
     private final int MIN_DISTANCE_CHANGE_METER = 0;
     private final int MIN_TIME_BETWEEN_UPDATES = 1 * 1000; //20 SECONDS
     private Button searchFriendsButton;
+    private Button searchSportCenterButton;
 
 
     @Override
@@ -68,6 +69,14 @@ public class HomeActivity extends AppCompatActivity implements SportCenterDelega
             }
         });
         fragment = (SportCenterFragment) getSupportFragmentManager().findFragmentById(R.id.sport_center_fragment);
+        searchSportCenterButton = (Button) findViewById(R.id.search_sport_center_button);
+        searchSportCenterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SearchSportCenterActivity.class);
+                startActivity(intent);
+            }
+        });
         loadCurrentCity();
     }
 

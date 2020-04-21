@@ -52,6 +52,26 @@ public class LDMRent implements RentIF{
         }
     };
 
+    private Response.Listener<JSONObject> insertListener = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            if(LDMRent.this.delegate==null){
+                return;
+            }
+            try {
+                String result = response.getString("error");
+                if(result.equals(NO_ERROR_STRING)){
+                    LDMRent.this.delegate.fieldbookedCorrectly();
+                    return;
+                }
+            }catch (JSONException exc){
+                exc.printStackTrace();
+                LDMRent.this.delegate.downloadFailed(exc);
+            }
+        }
+    };
+
+
     private Response.Listener<JSONObject> bookingListener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -114,6 +134,23 @@ public class LDMRent implements RentIF{
         bodyMap.put("token", token);
         JSONObject bodyJson = new JSONObject(bodyMap);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, bodyJson, bookingListener, errorListener);
+        queue.add(request);
+    }
+
+    @Override
+    public void addIntoRent(FootballFieldRent fieldRent, String userId, String token, int fieldID, RequestQueue queue) {
+        String url = Configuration.getInstance().getURL(Service.INSERT_IN_BOOKED_RENT);
+        Map<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("rent_id", fieldRent.getId());
+        bodyMap.put("token", token);
+        String formatDate = "YYYY-MM-dd HH:mm";
+        DateFormat dateFormat = new SimpleDateFormat(formatDate);
+        String dateString = dateFormat.format(fieldRent.getDate());
+        bodyMap.put("datetime", dateString );
+        bodyMap.put("user_id", userId);
+        bodyMap.put("field_id", fieldID);
+        JSONObject bodyJson = new JSONObject(bodyMap);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, bodyJson, insertListener, errorListener);
         queue.add(request);
     }
 }

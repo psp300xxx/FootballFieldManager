@@ -100,7 +100,13 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="question_add_in_rent">Do you want to be added into this match?</string>
+    <string name="question_add_in_rent_title">Are you sure?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_search_sport_center">SearchSportCenterActivity</string>
+    <string name="game_booked_correctly">Your place has been correctly booked</string>
+    <string name="yes_source">Yes</string>
+    <string name="no_source">No</string>
 </resources>

@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.FriendRentsActivity"></activity>
+        <activity
+            android:name=".activities.SearchSportCenterActivity"
+            android:label="@string/title_activity_search_sport_center"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.FriendRentsActivity" />
         <activity
             android:name=".activities.SearchFriendsActivity"
             android:label="@string/title_activity_search_friends"

@@ -12,4 +12,6 @@ public interface RentIF {
     void searchFutureRents(int fieldId, RequestQueue queue);
 
     void bookField(FootballFieldRent fieldRent,int centerId, String token, RequestQueue queue);
+
+    void addIntoRent(FootballFieldRent fieldRent, String userId, String token, int fieldID, RequestQueue queue);
 }

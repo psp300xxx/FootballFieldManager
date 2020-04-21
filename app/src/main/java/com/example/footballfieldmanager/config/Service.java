@@ -3,7 +3,8 @@ package com.example.footballfieldmanager.config;
 import androidx.annotation.NonNull;
 
 public enum Service {
-    LOGIN, FACEBOOK_LOGIN, SPORT_CENTERS, FIELD_FOR_CENTER, RENT_FOR_FIELD, BOOK_FIELD, SEARCH_USERS, SEARCH_RENTS_FOR_USER;
+    LOGIN, FACEBOOK_LOGIN, SPORT_CENTERS, FIELD_FOR_CENTER, RENT_FOR_FIELD, BOOK_FIELD, SEARCH_USERS, SEARCH_RENTS_FOR_USER,
+    INSERT_IN_BOOKED_RENT;
 
     @NonNull
     @Override
@@ -31,6 +32,9 @@ public enum Service {
         }
         else if(this == SEARCH_RENTS_FOR_USER){
             return "/rentForUser";
+        }
+        else if(this == INSERT_IN_BOOKED_RENT){
+            return "/bookTimeInExistingMatch";
         }
         return super.toString();
     }
