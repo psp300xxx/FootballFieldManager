@@ -95,7 +95,7 @@ public class LDMRent implements RentIF{
 
     @Override
     public void searchFutureRents(int fieldId, RequestQueue queue) {
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.RENT_FOR_FIELD);
+        String url = Configuration.getInstance().getURL(Service.RENT_FOR_FIELD);
         url += "?id=" + fieldId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, fieldListener, errorListener);
         queue.add(request);
@@ -103,7 +103,7 @@ public class LDMRent implements RentIF{
 
     @Override
     public void bookField(FootballFieldRent fieldRent, int centerId, String token, RequestQueue queue) {
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.BOOK_FIELD);
+        String url = Configuration.getInstance().getURL(Service.BOOK_FIELD);
         Map<String, Object> bodyMap = new HashMap<>();
         bodyMap.put("center_id", ""+centerId);
         bodyMap.put("field_id",""+ fieldRent.getFieldId());

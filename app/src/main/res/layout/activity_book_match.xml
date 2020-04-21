@@ -24,14 +24,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <fragment
-            android:id="@+id/select_field_fragment"
-            android:name="com.example.footballfieldmanager.fragments.StringFragment"
+            android:id="@+id/weather_fragment"
+            android:name="com.example.footballfieldmanager.fragments.WeatherFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
 
             />
+
+
+        <fragment
+        android:id="@+id/select_field_fragment"
+        android:name="com.example.footballfieldmanager.fragments.StringFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        />
 
         <fragment
             android:id="@+id/bookable_center_fragment"

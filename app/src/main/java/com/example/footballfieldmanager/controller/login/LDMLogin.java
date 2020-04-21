@@ -56,7 +56,7 @@ public class LDMLogin implements LoginIF {
                 LDMLogin.this.delegate.hasLoginFailed(error);
             }
         };
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.LOGIN) + "?id=" + id +"&password=" +password ;
+        String url = Configuration.getInstance().getURL(Service.LOGIN) + "?id=" + id +"&password=" +password ;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
         queue.add(request);
     }

@@ -22,6 +22,7 @@ import java.util.List;
 
 public class LDMUserManager implements UserIF {
     private UserDelegate delegate;
+
     private Response.Listener<JSONObject> userListener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -38,6 +39,23 @@ public class LDMUserManager implements UserIF {
                 }
                 LDMUserManager.this.delegate.userCorrectlyDownloaded(users);
             }catch (JSONException exc){
+                exc.printStackTrace();
+                LDMUserManager.this.delegate.userOperationFailed(exc);
+            }
+        }
+    };
+
+    private Response.Listener<JSONObject> fieldListener = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            if(LDMUserManager.this.delegate==null){
+                return;
+            }
+            try {
+                JSONArray array = response.getJSONArray("root");
+                List<FootballFieldRent> rents = com.example.footballfieldmanager.controller.rent.Utility.jsonToRents(array);
+                LDMUserManager.this.delegate.userFutureRentsDownloaded(rents);
+            }catch (JSONException|ParseException exc){
                 exc.printStackTrace();
                 LDMUserManager.this.delegate.userOperationFailed(exc);
             }
@@ -66,7 +84,7 @@ public class LDMUserManager implements UserIF {
 
     @Override
     public void searchFriends(String name, RequestQueue queue) {
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.SEARCH_USERS);
+        String url = Configuration.getInstance().getURL(Service.SEARCH_USERS);
         url += "?name="+name;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, userListener, errorListener);
         queue.add(request);
@@ -74,6 +92,9 @@ public class LDMUserManager implements UserIF {
 
     @Override
     public void searchUserFutureRents(String userID, RequestQueue queue) {
-
+        String url = Configuration.getInstance().getURL(Service.SEARCH_RENTS_FOR_USER);
+        url += "?user_id="+userID;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, fieldListener, errorListener);
+        queue.add(request);
     }
 }

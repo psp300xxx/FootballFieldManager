@@ -1,19 +1,23 @@
 package com.example.footballfieldmanager.fragments;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.footballfieldmanager.R;
-import com.example.footballfieldmanager.fragments.BookableTimeFragment.OnListFragmentInteractionListener;
+import com.example.footballfieldmanager.fragments.FootballFieldRentFragment.OnListFragmentInteractionListener;
 import com.example.footballfieldmanager.fragments.dummy.DummyContent.DummyItem;
-import com.example.footballfieldmanager.model.BookableTime;
+import com.example.footballfieldmanager.model.FootballField;
+import com.example.footballfieldmanager.model.FootballFieldRent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,35 +25,35 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyBookableTimeRecyclerViewAdapter extends RecyclerView.Adapter<MyBookableTimeRecyclerViewAdapter.ViewHolder> {
+public class MyFootballFieldRentRecyclerViewAdapter extends RecyclerView.Adapter<MyFootballFieldRentRecyclerViewAdapter.ViewHolder> {
 
-    private final List<BookableTime> mValues;
-    private final List<Boolean> mChecked;
+    private final List<FootballFieldRent> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyBookableTimeRecyclerViewAdapter(List<BookableTime> items, OnListFragmentInteractionListener listener, @Nullable List<Boolean> isChecked) {
+    public MyFootballFieldRentRecyclerViewAdapter(List<FootballFieldRent> items, OnListFragmentInteractionListener listener) {
         mValues = items;
-        mChecked = isChecked;
         mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_bookabletime, parent, false);
+                .inflate(R.layout.fragment_footballfieldrent, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mContentView.setText(""+mValues.get(position).getHour()+":00");
-        if(mChecked!=null){
-            holder.mSwitch.setChecked( mChecked.get(position) );
-        }
-        else{
-            holder.mSwitch.setChecked(false);
-        }
+        holder.mIdView.setText(mValues.get(position).getId()+"");
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        Date date = mValues.get(position).getDate();
+        holder.mDateView.setText(dateFormat.format(date));
+        List<String> list = mValues.get(position).getUserIdList();
+        ArrayAdapter<String> newArrayAdapter = new ArrayAdapter<String>(holder.mView.getContext(), R.layout.user_list_layout, list);
+
+        holder.mListView.setAdapter(newArrayAdapter);
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,20 +73,25 @@ public class MyBookableTimeRecyclerViewAdapter extends RecyclerView.Adapter<MyBo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mContentView;
-        public Switch mSwitch;
-        public BookableTime mItem;
+        public final TextView mIdView;
+        public final TextView mDateView;
+        public final TextView mFieldId;
+        public final ListView mListView;
+        public FootballFieldRent mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mContentView = (TextView) view.findViewById(R.id.content);
-            mSwitch =(Switch)view.findViewById(R.id.is_available);
+            mIdView = (TextView) view.findViewById(R.id.id_rent);
+            mDateView = (TextView) view.findViewById(R.id.date_rent);
+            mFieldId =(TextView)view.findViewById(R.id.field_id_rent);
+            mListView = (ListView)view.findViewById(R.id.users_list_view);
+
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mDateView.getText() + "'";
         }
     }
 }

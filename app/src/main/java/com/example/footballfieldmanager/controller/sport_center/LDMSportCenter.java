@@ -98,7 +98,7 @@ public class LDMSportCenter implements SportCenterIF {
 
     @Override
     public void searchSportCenters(String city, RequestQueue queue) {
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.SPORT_CENTERS) + "?city=" + city ;
+        String url = Configuration.getInstance().getURL(Service.SPORT_CENTERS) + "?city=" + city ;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
         queue.add(request);
     }
@@ -106,14 +106,14 @@ public class LDMSportCenter implements SportCenterIF {
 
     @Override
     public void searchSportCenters(double latitude, double longitude, RequestQueue queue) {
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.SPORT_CENTERS) + "?latitude=" + latitude + "&" + "longitude=" + longitude ;
+        String url = Configuration.getInstance().getURL(Service.SPORT_CENTERS) + "?latitude=" + latitude + "&" + "longitude=" + longitude ;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener);
         queue.add(request);
     }
 
     @Override
     public void searchFieldsForCenter(int centerId, RequestQueue queue) {
-        String url = Configuration.getInstance().getURL(Protocol.HTTP, Service.FIELD_FOR_CENTER);
+        String url = Configuration.getInstance().getURL(Service.FIELD_FOR_CENTER);
         url += "/"+centerId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, fieldListener, errorListener);
         queue.add(request);

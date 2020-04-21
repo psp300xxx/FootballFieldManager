@@ -13,10 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.FriendRentsActivity"></activity>
         <activity
             android:name=".activities.SearchFriendsActivity"
             android:label="@string/title_activity_search_friends"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BookMatchActivity" />
         <activity
             android:name=".activities.HomeActivity"

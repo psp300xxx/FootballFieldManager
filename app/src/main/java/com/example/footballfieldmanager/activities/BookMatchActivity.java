@@ -3,6 +3,7 @@ package com.example.footballfieldmanager.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,12 +22,17 @@ import com.example.footballfieldmanager.controller.rent.RentIF;
 import com.example.footballfieldmanager.controller.sport_center.LDMSportCenter;
 import com.example.footballfieldmanager.controller.sport_center.SportCenterDelegate;
 import com.example.footballfieldmanager.controller.sport_center.SportCenterIF;
+import com.example.footballfieldmanager.controller.weather.OpenWeather;
+import com.example.footballfieldmanager.controller.weather.WeatherDelegate;
+import com.example.footballfieldmanager.controller.weather.WeatherIF;
 import com.example.footballfieldmanager.fragments.BookableTimeFragment;
 import com.example.footballfieldmanager.fragments.StringFragment;
+import com.example.footballfieldmanager.fragments.WeatherFragment;
 import com.example.footballfieldmanager.model.BookableTime;
 import com.example.footballfieldmanager.model.FootballField;
 import com.example.footballfieldmanager.model.FootballFieldRent;
 import com.example.footballfieldmanager.model.SportCenter;
+import com.example.footballfieldmanager.model.WeatherData;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -38,7 +44,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
-public class BookMatchActivity extends AppCompatActivity implements BookableTimeFragment.OnListFragmentInteractionListener, StringFragment.OnListFragmentInteractionListener, SportCenterDelegate, RentDelegate, CalendarView.OnDateChangeListener {
+public class BookMatchActivity extends AppCompatActivity implements BookableTimeFragment.OnListFragmentInteractionListener, StringFragment.OnListFragmentInteractionListener, SportCenterDelegate, RentDelegate, CalendarView.OnDateChangeListener, WeatherFragment.OnFragmentInteractionListener, WeatherDelegate {
 
     private SportCenter sportCenter =  null;
     private CalendarView calendarView = null;
@@ -52,6 +58,8 @@ public class BookMatchActivity extends AppCompatActivity implements BookableTime
     private Date currentDate = null ;
     private int fieldIndex;
     private BookableTime selectedItem;
+    private WeatherFragment weatherFragment;
+    private WeatherIF weatherIF;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +75,11 @@ public class BookMatchActivity extends AppCompatActivity implements BookableTime
         RequestQueue queue = RequestQueueSingleton.getInstance(this).getQueue();
         sportCenterIF.searchFieldsForCenter((int)sportCenter.getId(), queue);
         currentDate = new Date(calendarView.getDate());
+        weatherFragment = (WeatherFragment)getSupportFragmentManager().findFragmentById(R.id.weather_fragment);
+        weatherFragment.getView().setVisibility(View.GONE);
         calendarView.setOnDateChangeListener(this);
+        weatherIF = new OpenWeather();
+        weatherIF.setDelegate(this);
         bookFieldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +92,7 @@ public class BookMatchActivity extends AppCompatActivity implements BookableTime
                 rentIF.bookField(rent, (int) sportCenter.getId(), token, queue);
             }
         });
+        weatherIF.searchWeatherData(sportCenter.getLatitude(), sportCenter.getLongitude(), queue);
     }
 
 
@@ -111,6 +124,13 @@ public class BookMatchActivity extends AppCompatActivity implements BookableTime
         RequestQueue queue = RequestQueueSingleton.getInstance(this).getQueue();
         rentIF.searchFutureRents(fieldIndex, queue);
     }
+
+
+    public void onListFragmentInteraction(Uri item){
+
+
+    }
+
 
     @Override
     public void onListFragmentInteraction(String item){
@@ -194,6 +214,23 @@ public class BookMatchActivity extends AppCompatActivity implements BookableTime
 
     @Override
     public void downloadFailed(Exception exc) {
+        Toast.makeText(this, exc.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void weatherDataDownloaded(List<WeatherData> weatherDataList) {
+        weatherFragment.setHeaderText(weatherDataList.get(0).getWeather());
+        weatherFragment.setList(weatherDataList);
+        weatherFragment.getView().setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void operationFailed(Exception exc) {
         Toast.makeText(this, exc.getLocalizedMessage(), Toast.LENGTH_LONG).show();
     }
 }
